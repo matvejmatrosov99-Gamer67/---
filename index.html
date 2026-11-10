@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>КорзинаПлюс: где выгоднее купить продукты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#EEF3F1;--surface:#FFFFFF;--ink:#13221D;--muted:#52635C;--line:#CBD8D2;--accent:#0B7A59;--accent-ink:#FFFFFF;--tag:#FFD23F;--tag-ink:#1A1A1A;--warn:#B3261E;--receipt:#FFFFFF;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1A16;--surface:#16241F;--ink:#E8F0EC;--muted:#9DB0A7;--line:#2A3D36;--accent:#3DD6A0;--accent-ink:#06261B;--tag:#FFD23F;--tag-ink:#1A1A1A;--warn:#FF8A80;--receipt:#1B2B25;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1A16;--surface:#16241F;--ink:#E8F0EC;--muted:#9DB0A7;--line:#2A3D36;--accent:#3DD6A0;--accent-ink:#06261B;--tag:#FFD23F;--tag-ink:#1A1A1A;--warn:#FF8A80;--receipt:#1B2B25;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Manrope,system-ui,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
+.logo{font-weight:800;font-size:20px;text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo i{font-style:normal;background:var(--tag);color:var(--tag-ink);padding:2px 8px;border-radius:4px;transform:rotate(-3deg)}
+nav{display:flex;gap:18px;align-items:center;font-size:15px}
+nav a{text-decoration:none;color:var(--muted)}nav a:hover{color:var(--ink)}
+.theme{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+@media(max-width:700px){nav a{display:none}}
+h1{font-size:clamp(34px,6vw,60px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:28px 0 16px;max-width:15ch}
+.lead{font-size:18px;color:var(--muted);max-width:58ch;margin:0 0 8px}
+section{padding:44px 0}
+h2{font-size:clamp(24px,3.5vw,34px);line-height:1.15;margin:0 0 10px;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--muted);max-width:62ch;margin:0 0 24px}
+.demo{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.demo{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.panel h3{margin:0 0 10px;font-size:17px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.item:last-child{border:0}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 16px/1 Manrope;cursor:pointer}
+.qty output{min-width:20px;text-align:center;font-weight:600}
+.opts{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:8px;font-size:14px}
+.opts label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.receipts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:1000px){.receipts{grid-template-columns:1fr}}
+.rc{background:var(--receipt);border:1px solid var(--line);border-radius:4px 4px 0 0;padding:16px 14px 22px;font:400 13px/1.5 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;position:relative;
+background-image:linear-gradient(135deg,var(--bg) 25%,transparent 25%),linear-gradient(225deg,var(--bg) 25%,transparent 25%);background-size:12px 12px;background-position:0 100%;background-repeat:repeat-x}
+.rc.best{border:2px solid var(--accent)}
+.rc h4{margin:0 0 2px;font:800 17px/1.2 Manrope,sans-serif}
+.rc .meta{color:var(--muted);font-size:12px;margin-bottom:8px}
+.ln{display:flex;justify-content:space-between;gap:8px}
+.ln.sm{color:var(--muted);font-size:12px}
+.ln.neg span:last-child{color:var(--accent)}
+.sep{border-top:1px dashed var(--line);margin:8px 0}
+.tot{font:800 22px/1.2 Manrope,sans-serif;display:flex;justify-content:space-between;margin-top:4px}
+.badge{position:absolute;top:-12px;right:10px;background:var(--tag);color:var(--tag-ink);font:800 13px/1 Manrope;padding:6px 10px;border-radius:4px;transform:rotate(2deg)}
+.split{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:8px 14px;font:600 14px Manrope;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.an{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:700px){.an{grid-template-columns:1fr}}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.price{font:800 28px/1.1 Manrope}
+.ru{border-color:var(--accent)}
+.stamp{display:inline-block;background:var(--tag);color:var(--tag-ink);font-weight:800;font-size:13px;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.formula{font:600 15px/1.7 "IBM Plex Mono",ui-monospace,monospace;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:800px){.cols{grid-template-columns:1fr}}
+.cols p{margin:6px 0 0;color:var(--muted)}
+.cols h3{margin:0;font-size:18px}
+.tl{border-left:3px solid var(--accent);padding-left:18px;display:grid;gap:18px;max-width:700px}
+.tl b{display:block}
+.tl span{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--muted);font-size:14px}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.band{box-shadow:0 0 0 100vmax var(--surface);clip-path:inset(0 -100vmax);background:var(--surface)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:20px 0 56px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.hero h1{margin-top:12px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{display:inline-block;padding:14px 22px;border-radius:8px;font-weight:800;text-decoration:none;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
+.btn.o{background:transparent;color:var(--ink);border-color:var(--ink)}
+.tagbox{background:var(--tag);color:var(--tag-ink);border-radius:14px;padding:26px 26px 22px;transform:rotate(2deg);box-shadow:0 14px 0 -6px var(--accent);max-width:380px;justify-self:center}
+.tagbox small{font-weight:600;font-size:14px}
+.tagbox .old{font:800 26px/1 Manrope;text-decoration:line-through;text-decoration-thickness:3px;opacity:.7;margin:14px 0 2px}
+.tagbox .new{font:800 64px/1 Manrope;letter-spacing:-.03em}
+.tagbox .sv{margin-top:12px;border-top:2px dashed rgba(0,0,0,.35);padding-top:10px;font-weight:600;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:28px 0}
+@media(max-width:800px){.stats{grid-template-columns:1fr 1fr}}
+.stats b{display:block;font:800 34px/1.1 Manrope;color:var(--accent)}
+.stats span{color:var(--muted);font-size:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:900px){.grid3,.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid3,.grid4{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.band .card{background:var(--bg)}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.card .ic{font-size:26px;margin-bottom:8px}
+.card.hl{border-top:5px solid var(--tag)}
+table.cmp{width:100%;border-collapse:collapse;font-size:15px;min-width:560px}
+.cmp th,.cmp td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:center}
+.cmp th:first-child,.cmp td:first-child{text-align:left;font-weight:600}
+.cmp tr.me td{background:var(--tag);color:var(--tag-ink);font-weight:800}
+.tw{overflow-x:auto}
+details{border-bottom:1px solid var(--line);padding:14px 0}
+summary{font-weight:800;cursor:pointer;font-size:17px}
+details p{margin:10px 0 0;color:var(--muted);max-width:70ch}
+mark{background:var(--tag);color:var(--tag-ink);padding:0 .18em;border-radius:8px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.card,.panel,.pt,.split,.formula{border-radius:22px}
+.btn{border-radius:999px;padding:16px 28px;font-size:17px;box-shadow:0 6px 0 -2px rgba(0,0,0,.18);transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.phoneWrap{position:relative;justify-self:center;padding:20px}
+.blob{position:absolute;inset:0;margin:auto;width:300px;height:300px;border-radius:50%;background:var(--tag);opacity:.9}
+.phone{position:relative;width:268px;background:var(--surface);color:var(--ink);border:9px solid var(--ink);border-radius:38px;padding:18px 14px 16px;transform:rotate(-3deg);box-shadow:0 24px 40px -18px rgba(0,0,0,.4)}
+.ph-top{font-weight:800;margin-bottom:12px}
+.ph-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;border-radius:14px;background:var(--bg);margin-bottom:8px;font-size:15px}
+.ph-row.best{background:var(--accent);color:var(--accent-ink)}
+.ph-row em{font-style:normal;display:block;font-size:12px;opacity:.9}
+.ph-save{margin-top:10px;text-align:center;font-size:14px;color:var(--muted)}
+.ph-save b{color:var(--accent)}
+.sticker{position:absolute;right:-6px;top:6px;background:var(--warn);color:#fff;font:800 22px/1 Manrope;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;transform:rotate(12deg);box-shadow:0 8px 16px -6px rgba(0,0,0,.4)}
+.cap{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+.mq{overflow:hidden;border-block:1px solid var(--line);background:var(--tag);color:var(--tag-ink);margin:0 -20px}
+.mq div{display:flex;gap:36px;white-space:nowrap;width:max-content;padding:12px 0;font-weight:800;animation:mq 30s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:800px){.steps{grid-template-columns:1fr}}
+.steps .card b{display:block;font:800 56px/1 Manrope;color:var(--accent);margin-bottom:6px}
+.int{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px;transition:transform .2s,border-color .2s}
+.int:hover{transform:translateY(-4px);border-color:var(--accent)}
+.int .ic{font-size:30px}
+.int h3{margin:0;font-size:17px}
+.int p{margin:0;color:var(--muted);font-size:14px;flex:1}
+.st{align-self:flex-start;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
+.st.l{background:var(--tag);color:var(--tag-ink)}
+.st.m{background:transparent;color:var(--muted);border:1px solid var(--line)}
+input[type=range]{accent-color:var(--accent);height:34px}
+.big{font:800 clamp(26px,4vw,38px)/1.1 Manrope;color:var(--accent)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.mq div{animation:none}.rv{opacity:1;transform:none;transition:none}}
+
+/* Хаотичный декоративный узор по бокам страницы */
+body{position:relative;overflow-x:hidden}
+.wrap{position:relative;z-index:1}
+.side-decor{position:fixed;top:0;bottom:0;width:clamp(72px,calc((100vw - 1120px)/2 - 18px),190px);z-index:0;pointer-events:none;overflow:hidden}
+.side-decor.left{left:0}
+.side-decor.right{right:0}
+.side-decor span{position:absolute;display:grid;place-items:center;width:42px;height:42px;font-size:clamp(22px,2vw,34px);opacity:.98;filter:saturate(1.8) brightness(1.12) drop-shadow(0 3px 7px rgba(255,145,30,.22));transform:rotate(var(--tilt,0deg));animation:icon-drift 6s ease-in-out infinite alternate}
+.side-decor span:nth-child(3n){font-size:clamp(28px,2.5vw,40px);opacity:.82;filter:saturate(2) brightness(1.15) drop-shadow(0 3px 8px rgba(255,145,30,.25));animation-duration:8s}
+.side-decor span:nth-child(4n){animation-delay:-2.5s}
+@keyframes icon-drift{from{translate:0 -5px}to{translate:0 7px}}
+@media(max-width:1250px){.side-decor{display:none}}
+@media(prefers-reduced-motion:reduce){.side-decor span{animation:none}}
+
+</style>
+</head>
+<body>
+
+<!-- Декоративные иконки по краям: намеренно расположены в хаотичном порядке -->
+<div class="side-decor left" aria-hidden="true">
+ <span style="top:5%;left:18%;--tilt:-16deg">🥑</span><span style="top:13%;left:58%;--tilt:13deg">🛒</span>
+ <span style="top:22%;left:8%;--tilt:21deg">🍋</span><span style="top:31%;left:48%;--tilt:-8deg">🥛</span>
+ <span style="top:40%;left:20%;--tilt:17deg">🍞</span><span style="top:49%;left:62%;--tilt:-20deg">🍎</span>
+ <span style="top:58%;left:5%;--tilt:11deg">🥕</span><span style="top:67%;left:43%;--tilt:-12deg">🧀</span>
+ <span style="top:76%;left:14%;--tilt:24deg">🥦</span><span style="top:85%;left:60%;--tilt:-18deg">🍓</span>
+ <span style="top:93%;left:24%;--tilt:8deg">🥨</span>
+</div>
+<div class="side-decor right" aria-hidden="true">
+ <span style="top:7%;right:16%;--tilt:14deg">🍊</span><span style="top:16%;right:52%;--tilt:-19deg">🥫</span>
+ <span style="top:25%;right:8%;--tilt:8deg">🍇</span><span style="top:34%;right:43%;--tilt:22deg">🥚</span>
+ <span style="top:43%;right:18%;--tilt:-13deg">🧃</span><span style="top:52%;right:60%;--tilt:18deg">🍌</span>
+ <span style="top:61%;right:5%;--tilt:-21deg">🥬</span><span style="top:70%;right:46%;--tilt:10deg">🍪</span>
+ <span style="top:79%;right:14%;--tilt:-7deg">🫑</span><span style="top:88%;right:54%;--tilt:20deg">🍐</span>
+ <span style="top:95%;right:22%;--tilt:-15deg">🛍️</span>
+</div>
+
+<div class="wrap">
+<header>
+ <a class="logo" href="#top"><i>Плюс</i>Корзина</a>
+ <nav><a href="#demo">Расчёт</a><a href="#stores">Магазины</a><a href="#analogs">Аналоги</a><a href="#how">Как считаем</a><a href="#pilot">Пилот</a>
+ <button class="theme" id="theme" type="button" aria-label="Переключить тему">Тема</button></nav>
+</header>
+
+<main id="top">
+<div class="hero">
+ <div>
+  <p class="lead" style="margin:0">Приложение для выгодных покупок</p>
+  <h1>Один список, три чека. <mark>Видно, где дешевле.</mark></h1>
+  <p class="lead">КорзинаПлюс считает не цену на ценнике, а итог к оплате: с акциями, картой лояльности, бонусами и дорогой до магазина. Для тех, кто хочет тратить меньше и не листать пять приложений.</p>
+  <div class="cta"><a class="btn" href="#demo">Попробовать расчёт</a><a class="btn o" href="#how">Как это работает</a></div>
+ </div>
+ <div><div class="phoneWrap"><i class="blob"></i><div class="phone" aria-label="Пример экрана приложения"><div class="ph-top">🧺 Мой список · 5 товаров</div><div class="ph-row"><span>Магазин А</span><b>3 912 ₽</b></div><div class="ph-row best"><span>Магазин Б<em>выгоднее всего</em></span><b>3 704 ₽</b></div><div class="ph-row"><span>Магазин В</span><b>3 951 ₽</b></div><div class="ph-save">Разница до <b>247 ₽</b> за один поход</div></div><div class="sticker">−6%</div></div><div class="cap">Экран приложения, пример с условными цифрами</div></div>
+</div>
+<div class="band"><div class="stats">
+ <div><b>3–5</b><span>торговых сетей в пилоте</span></div>
+ <div><b>500–1000</b><span>пользователей пилота</span></div>
+ <div><b>7–10%</b><span>целевая экономия, проверяется пилотом</span></div>
+ <div><b>152-ФЗ</b><span>данные хранятся в России</span></div>
+</div></div>
+<div class="mq" aria-hidden="true"><div><span>🏪 Магазины у дома</span><span>🛒 Супермаркеты</span><span>🏷️ Дискаунтеры</span><span>💊 Аптеки</span><span>🚚 Доставка продуктов</span><span>💳 Карты лояльности</span><span>🧾 Чеки по QR-коду</span><span>🏪 Магазины у дома</span><span>🛒 Супермаркеты</span><span>🏷️ Дискаунтеры</span><span>💊 Аптеки</span><span>🚚 Доставка продуктов</span><span>💳 Карты лояльности</span><span>🧾 Чеки по QR-коду</span></div></div>
+<section id="steps">
+ <h2>Три шага до выгодной покупки</h2>
+ <p class="sub">Без таблиц и калькуляторов: приложение считает само.</p>
+ <div class="steps">
+  <div class="card"><b>1</b><h3>Составьте список</h3><p>Напишите, скажите голосом или отсканируйте штрихкод.</p></div>
+  <div class="card"><b>2</b><h3>Добавьте карты</h3><p>Введите номера карт лояльности, а мы оценим, какие из них реально выгодны.</p></div>
+  <div class="card"><b>3</b><h3>Идите, где дешевле</h3><p>Приложение покажет итог в каждом магазине и подскажет, где купить.</p></div>
+ </div>
+</section>
+
+
+
+<section id="demo">
+ <h2>Попробуйте на примере</h2>
+ <p class="sub">Соберите список слева, и приложение покажет итог в каждом магазине. Во всех магазинах сравнивается один и тот же товар: тот же бренд и тот же вес. Магазины и цены в демо условные.</p>
+ <div class="demo">
+  <div class="panel">
+   <h3>Список покупок</h3>
+   <div id="list"></div>
+   <div class="opts" id="opts"></div>
+  </div>
+  <div>
+   <div id="out"></div>
+  </div>
+ </div>
+</section>
+
+<section id="save">
+ <h2>Сколько вы сэкономите?</h2>
+ <p class="sub">Подвиньте ползунок. Расчёт идёт по целевым 7–10% пилота: это цель, а не обещание.</p>
+ <div class="panel">
+  <label for="sp">Расходы на продукты в месяц: <b id="spv"></b></label>
+  <input id="sp" type="range" min="5000" max="60000" step="1000" value="20000" style="width:100%">
+  <div class="grid3" style="margin-top:16px">
+   <div class="card"><p>В месяц</p><div class="big" id="sm"></div></div>
+   <div class="card"><p>За год</p><div class="big" id="sy"></div></div>
+   <div class="card hl"><h3>Что это значит</h3><p>Больше денег остаётся на другие цели, и ради этого не нужно покупать меньше.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="features">
+ <h2>Что умеет КорзинаПлюс</h2>
+ <p class="sub">Всё, чтобы решение «где купить» заняло минуту, а не вечер.</p>
+ <div class="grid3">
+  <div class="card"><div class="ic">📝</div><h3>Умный список</h3><p>Вводите вручную, голосом, сканируете штрихкод или чек. Приложение подсказывает замену, если товара нет.</p></div>
+  <div class="card"><div class="ic">🧾</div><h3>Итог к оплате</h3><p>Считаем акции, скидки по картам, бонусы и кешбэк, а не просто цену на ценнике.</p></div>
+  <div class="card"><div class="ic">💳</div><h3>Ценность карт лояльности</h3><p>Показываем, какие карты действительно выгодны, а какие только заставляют покупать больше.</p></div>
+  <div class="card"><div class="ic">🗺️</div><h3>Разделить покупки</h3><p>Предлагаем два-три магазина, если экономия больше затрат на дорогу и время.</p></div>
+  <div class="card"><div class="ic">📉</div><h3>История цен</h3><p>Видно, низкая цена сейчас или завышена. Приходит уведомление, когда регулярный товар подешевел.</p></div>
+  <div class="card"><div class="ic">👵</div><h3>Просто для всех</h3><p>Крупный шрифт, голосовой ввод и простая навигация. Подходит и пенсионерам.</p></div>
+ </div>
+</section>
+
+<section id="analogs">
+ <h2>Один и тот же товар в разных магазинах</h2>
+ <p class="sub">Сравниваются одинаковые товары: тот же бренд, тот же вес. Если товара нет, замена показывается отдельно и помечена как другой товар, а сравнивается по цене за 100 г или 100 мл. Цены условные.</p>
+ <div class="chips" id="chips" role="group" aria-label="Выберите товар"></div>
+ <div class="an" id="an"></div>
+</section>
+
+<section id="stores">
+ <h2>Магазины и источники данных</h2>
+ <p class="sub">Приложение собирает цены и условия из нескольких источников. Конкретные сети будут названы после соглашений с ними, сейчас идёт подготовка пилота.</p>
+ <div class="grid4">
+  <div class="int"><div class="ic">🏪</div><h3>Магазины у дома</h3><p>Цены из листовок и чеков пользователей.</p><span class="st">Старт пилота</span></div>
+  <div class="int"><div class="ic">🛒</div><h3>Супермаркеты</h3><p>Акции, каталоги, цены по штрихкоду.</p><span class="st">Старт пилота</span></div>
+  <div class="int"><div class="ic">🏷️</div><h3>Дискаунтеры</h3><p>Низкие цены и собственные марки с проверкой реальной выгоды.</p><span class="st">Старт пилота</span></div>
+  <div class="int"><div class="ic">💳</div><h3>Карты лояльности</h3><p>Ввод номера карты вручную или штрихкодом, без паролей от кабинетов.</p><span class="st l">Этап 2</span></div>
+  <div class="int"><div class="ic">🧾</div><h3>Чек по QR-коду</h3><p>Сканируете чек, цены обновляются, а экономия считается автоматически.</p><span class="st l">Этап 2</span></div>
+  <div class="int"><div class="ic">🗺️</div><h3>Карты и маршруты</h3><p>Расстояние до магазинов через Яндекс Карты или 2ГИС.</p><span class="st l">Этап 2</span></div>
+  <div class="int"><div class="ic">💊</div><h3>Аптеки и товары для дома</h3><p>Новые категории, где цены тоже сильно различаются.</p><span class="st m">Этап 3–4</span></div>
+  <div class="int"><div class="ic">🔌</div><h3>Прямые данные сетей</h3><p>Партнёрские API с актуальными ценами и данными по бонусам.</p><span class="st m">Этап 4</span></div>
+ </div>
+</section>
+
+
+
+<section id="compare">
+ <h2>Чем отличаемся от других сервисов</h2>
+ <p class="sub">По открытым описаниям сервисов. «—» значит, что функция не заявлена. Перед решениями сверяйте с самими приложениями.</p>
+ <div class="tw"><table class="cmp"><thead><tr><th>Сервис</th><th>Акции</th><th>Сравнение списка</th><th>Карты лояльности</th><th>Российские аналоги</th></tr></thead><tbody>
+  <tr><td>Едадил</td><td>да</td><td>частично</td><td>—</td><td>—</td></tr>
+  <tr><td>Lookoshko</td><td>да</td><td>да</td><td>да</td><td>—</td></tr>
+  <tr><td>ЦеноМер</td><td>да</td><td>да</td><td>—</td><td>—</td></tr>
+  <tr class="me"><td>КорзинаПлюс</td><td>да</td><td>да</td><td>да, с оценкой бонусов</td><td>да</td></tr>
+ </tbody></table></div>
+</section>
+
+<section id="how">
+ <h2>Как считаем выгоду</h2>
+ <p class="sub">Бонусы учитываются не по номиналу, а с коэффициентом: сгорают ли баллы, можно ли ими платить и какую часть чека они покрывают.</p>
+ <div class="formula">Итог = Σ(цена − акция) − скидка по карте − ценность бонусов + дорога</div>
+ <div class="cols" style="margin-top:20px">
+  <div><h3>Честные данные</h3><p>У каждой цены видна дата обновления и степень надёжности: листовка, чек пользователя или данные сети.</p></div>
+  <div><h3>Данные у вас</h3><p>Чеки обрабатываются на устройстве, а данные хранятся на серверах в России (152-ФЗ). Пароли от кабинетов магазинов мы не храним.</p></div>
+  <div><h3>Реклама отдельно</h3><p>Платные размещения помечены и не влияют на расчёт выгоды.</p></div>
+ </div>
+</section>
+
+<section id="pilot">
+ <h2>Путь от идеи к приложению</h2>
+ <p class="sub">Целевые показатели проверяются пилотом, а не заявляются заранее.</p>
+ <div class="tl">
+  <div><b>Исследование и сбор данных</b><span>Листовки, чеки, краудсорсинг цен в одном городе, 3–5 сетей.</span></div>
+  <div><b>Ядро расчёта и MVP</b><span>Список, сравнение, карты лояльности, Android и RuStore.</span></div>
+  <div><b>Пилот на 500–1000 пользователях</b><span>Измеряем экономию (цель 7–10%), точность цен, долю сменивших магазин.</span></div>
+  <div><b>Масштабирование</b><span>Новые города и категории, партнёрские API сетей, подписка.</span></div>
+ </div>
+</section>
+<section id="faq">
+ <h2>Частые вопросы</h2>
+ <details><summary>Откуда берутся цены?</summary><p>Сначала из листовок, каталогов акций и чеков пользователей, затем из партнёрских данных сетей. У каждой цены виден возраст и надёжность.</p></details>
+ <details><summary>Нужно ли передавать пароли от карт магазинов?</summary><p>Нет. Номер карты вводится вручную, пароли от личных кабинетов мы не храним. Доступ к данным карты возможен только через официальный API сети и с вашего согласия.</p></details>
+ <details><summary>Где хранятся мои данные?</summary><p>На серверах в России, в соответствии с 152-ФЗ. Чеки обрабатываются на устройстве, а на сервер уходят только обезличенные цены.</p></details>
+ <details><summary>Сколько можно сэкономить?</summary><p>Целевой ориентир пилота — 7–10% от стоимости корзины. Это цель, а не гарантия: реальный результат покажет пилот.</p></details>
+ <details><summary>Реклама повлияет на рекомендации?</summary><p>Нет. Платные размещения помечены как реклама и не влияют на расчёт выгоды.</p></details>
+</section>
+</main>
+
+<footer><b>КорзинаПлюс</b> — приложение для выгодных покупок. Демонстрационная версия идеи: цены, магазины и условия карт вымышленные. Реальные данные появятся в пилоте. Целевые показатели проверяются пилотом.</footer>
+</div>
+
+<script>
+const R=n=>Math.round(n).toLocaleString("ru-RU")+" ₽";
+const P=[
+ {n:"Молоко, 1 л",p:[89,84,92],q:2},{n:"Хлеб",p:[45,48,42],q:1},{n:"Яйца, 10 шт.",p:[118,125,110],q:1},
+ {n:"Гречка, 800 г",p:[96,89,99],q:1},{n:"Куриное филе, 1 кг",p:[389,365,410],q:1},{n:"Сыр, 200 г",p:[189,205,175],q:0},
+ {n:"Яблоки, 1 кг",p:[129,119,135],q:0},{n:"Масло подсолнечное, 1 л",p:[139,128,145],q:0}];
+const S=[
+ {n:"Магазин А",km:0.5,card:.05,bonus:.03,k:.5,note:"баллы сгорают через месяц",promo:{5:.20}},
+ {n:"Магазин Б",km:1.2,card:0,bonus:.07,k:.8,note:"баллы без срока, до 50% чека",promo:{0:.15,4:.10}},
+ {n:"Магазин В",km:2.0,card:.03,bonus:0,k:0,note:"только скидка по карте",promo:{2:.12}}];
+const st={cards:[true,true,true],road:true};
+const $=id=>document.getElementById(id);
+
+function drawList(){
+ $("list").innerHTML=P.map((x,i)=>`<div class="item"><span>${x.n}</span><span class="qty"><button type="button" data-i="${i}" data-d="-1" aria-label="Убрать: ${x.n}">−</button><output>${x.q}</output><button type="button" data-i="${i}" data-d="1" aria-label="Добавить: ${x.n}">+</button></span></div>`).join("");
+ $("opts").innerHTML=S.map((s,i)=>`<label><input type="checkbox" data-c="${i}" ${st.cards[i]?"checked":""}> Есть карта: ${s.n}</label>`).join("")+
+ `<label><input type="checkbox" data-road ${st.road?"checked":""}> Учитывать дорогу (15 ₽ за км, туда и обратно)</label>`;
+}
+function calc(){
+ return S.map((s,si)=>{
+  let sub=0,lines=[];
+  P.forEach((x,i)=>{if(!x.q)return;const d=s.promo[i]||0,u=x.p[si]*(1-d);sub+=u*x.q;lines.push({n:x.n,q:x.q,sum:u*x.q,d});});
+  const card=st.cards[si]?sub*s.card:0,bp=st.cards[si]?sub*s.bonus:0,bv=bp*s.k,road=st.road?2*s.km*15:0;
+  return {s,lines,sub,card,bp,bv,road,total:sub-card-bv+road};
+ });
+}
+function drawOut(){
+ const any=P.some(x=>x.q>0);
+ if(!any){$("out").innerHTML='<div class="empty">Список пуст. Добавьте товары слева, и здесь появятся три чека.</div>';return;}
+ const c=calc(),min=Math.min(...c.map(x=>x.total)),max=Math.max(...c.map(x=>x.total));
+ const html=c.map(r=>{const best=r.total===min;
+  return `<div class="rc${best?" best":""}">${best?`<span class="badge">Выгоднее</span>`:""}
+  <h4>${r.s.n}</h4><div class="meta">${r.s.km} км · ${r.s.note}</div>
+  ${r.lines.map(l=>`<div class="ln"><span>${l.n} ×${l.q}</span><span>${R(l.sum)}</span></div>${l.d?`<div class="ln sm"><span>акция −${Math.round(l.d*100)}%</span><span></span></div>`:""}`).join("")}
+  <div class="sep"></div>
+  <div class="ln"><span>Сумма по ценникам</span><span>${R(r.sub)}</span></div>
+  ${r.card?`<div class="ln neg"><span>Скидка по карте</span><span>−${R(r.card)}</span></div>`:""}
+  ${r.bp?`<div class="ln neg"><span>Бонусы ${R(r.bp).replace(" ₽","")} б. ×${r.s.k}</span><span>−${R(r.bv)}</span></div>`:""}
+  ${r.road?`<div class="ln"><span>Дорога</span><span>+${R(r.road)}</span></div>`:""}
+  <div class="sep"></div>
+  <div class="tot"><span>Итог</span><span>${R(r.total)}</span></div></div>`}).join("");
+ let alt=0;P.forEach((x,i)=>{if(!x.q)return;alt+=Math.min(...S.map((s,si)=>x.p[si]*(1-(s.promo[i]||0))))*x.q;});
+ const cheap=c.find(x=>x.total===min);
+ $("out").innerHTML=`<div class="receipts">${html}</div>
+ <div class="split"><b>Лучший магазин: ${cheap.s.name||cheap.s.n}.</b> Разница между самым выгодным и самым дорогим вариантом: ${R(max-min)}.<br>
+ Если разделить покупки и брать каждый товар там, где он дешевле, сумма по ценникам составит ${R(alt)} (без карт и дороги), но придётся зайти в несколько магазинов.</div>`;
+}
+$("list").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(!b)return;
+ const x=P[+b.dataset.i];x.q=Math.max(0,Math.min(9,x.q+ +b.dataset.d));drawList();drawOut();});
+$("opts").addEventListener("change",e=>{const t=e.target;
+ if(t.hasAttribute("data-road"))st.road=t.checked;else st.cards[+t.dataset.c]=t.checked;drawOut();});
+
+const A=[
+ {n:"Молоко",f:"Молоко 3,2%, 1 л, один бренд",p:[89,84,92],w:1000,u:"мл"},
+ {n:"Гречка",f:"Гречка ядрица, 800 г, один бренд",p:[96,89,99],w:800,u:"г"},
+ {n:"Паста",f:"Паста дурум (импорт), 500 г, один бренд",p:[159,149,165],w:500,u:"г",alt:{n:"Российская паста из твёрдых сортов, 450 г",p:109,w:450}},
+ {n:"Кофе",f:"Кофе в зёрнах, 1 кг, один бренд",p:[1290,1240,1320],w:1000,u:"г",alt:{n:"Кофе российской обжарки, 1 кг",p:990,w:1000}}];
+let ai=0;
+function drawAn(){
+ $("chips").innerHTML=A.map((a,i)=>`<button class="chip" type="button" data-a="${i}" aria-pressed="${i===ai}">${a.n}</button>`).join("");
+ const a=A[ai],mn=Math.min(...a.p),per=(p,w)=>R(p/w*100);
+ $("an").innerHTML=S.map((s,i)=>`<div class="pt${a.p[i]===mn?" ru":""}">${a.p[i]===mn?'<span class="stamp">Дешевле всего</span><br>':""}<b>${s.n}</b><div class="note">${a.f}</div><div class="price">${R(a.p[i])}</div><div class="note">${per(a.p[i],a.w)} за 100 ${a.u}</div></div>`).join("")+
+ (a.alt?`<div class="pt" style="grid-column:1/-1"><span class="stamp">Замена, другой товар</span><br><b>${a.alt.n}</b><div class="note">Цена за 100 ${a.u}: ${per(a.alt.p,a.alt.w)} против ${per(mn,a.w)} у самого дешёвого предложения на привычный товар.</div></div>`:"");
+}
+$("chips").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;ai=+b.dataset.a;drawAn();});
+
+const root=document.documentElement;
+$("theme").addEventListener("click",()=>{
+ const dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+ root.dataset.theme=dark?"light":"dark";});
+const sp=$("sp");function sv(){const v=+sp.value;$("spv").textContent=R(v);$("sm").textContent=R(v*.07)+" – "+R(v*.10);$("sy").textContent=R(v*.07*12)+" – "+R(v*.10*12);}
+sp.addEventListener("input",sv);sv();
+if(!matchMedia("(prefers-reduced-motion:reduce)").matches&&"IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll("main section").forEach(s=>{s.classList.add("rv");io.observe(s)});}
+drawList();drawOut();drawAn();
+</script>
+</body>
+</html>
